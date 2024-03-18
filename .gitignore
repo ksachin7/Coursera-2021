@@ -3,3 +3,4 @@ php/md5.php
 *Extras/
 Icon?
 .DS_Store
+.gitignore
