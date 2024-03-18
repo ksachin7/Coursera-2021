@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+
+  <title>The Green Screen</title>
+  <style>
+	body {
+	  background-color: wheat;
+	  font-family: Verdana;
+	  margin: 70px;
+	}
+  @media (max-width: 480px){
+    body{
+      margin: 0;
+    }
+  }
+	.title{
+		padding-bottom: 2rem;
+	}
+    #can1,
+    #can2,
+    #can3 {
+      border: 1px dashed grey;
+      width: 360px;
+      background-color: white;
+    }
+    .can{
+    	padding: 1.5rem;
+    }
+    h1 {
+      text-align: center;
+      font-family: arial;
+      font-size: 56px;
+      color: #102567
+    }
+
+    p{
+      color: tomato;
+      margin-left: 2rem;
+    }
+
+    input {
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="title">Change Background of Image</h1>
+  <div class="can">
+  	  <canvas id="can1"></canvas> +
+	  <canvas id="can2"></canvas>--->
+	  <canvas id="can3"></canvas>
+  </div>
+
+
+  <p>FG-Image:
+    <input type="file" onchange="upload()" id="f1" multiple="false" accept="image/*">
+    BG-Image:
+    <input type="file" onchange="upload2()" id="f2" multiple="false" accept="image/*">
+    <input value="Combine" onclick="combine()" type="button">
+  </p>
+  <p>Note: For Changing Background You must have to choose a FG-Image with completely Green Background.</p>
+  <script src="https://www.dukelearntoprogram.com//course1/common/js/image/SimpleImage.js"></script>
+  <script type="text/javascript">
+    var canvas = document.getElementById("can1");
+    var canvas2 = document.getElementById("can2");
+    var canvas3 = document.getElementById("can3");
+    var fg = null;
+    var bg = null;
+
+    function upload() {
+      var f = document.getElementById("f1");
+
+      fg = new SimpleImage(f);
+      fg.drawTo(canvas);
+    }
+
+    function upload2() {
+      var b = document.getElementById("f2");
+
+      bg = new SimpleImage(b);
+      bg.drawTo(canvas2);
+    }
+
+    function combine() {
+      if (fg == null || bg == null) {
+        alert("images are not loaded");
+        return;
+      }
+
+      clear();
+
+      var output = new SimpleImage(fg.getWidth(), fg.getHeight());
+      for (var p of fg.values()) {
+        var x = p.getX()
+        var y = p.getY()
+        if (p.getGreen() > p.getRed() + p.getBlue()) {
+          var bpixel = bg.getPixel(x, y)
+          output.setPixel(x, y, bpixel);
+        } else {
+          output.setPixel(x, y, p);
+        }
+      }
+      output.drawTo(canvas3);
+    }
+
+    function clear() {
+      var context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      var ctx = canvas2.getContext("2d");
+      ctx.clearRect(0, 0, canvas2.width, canvas2.height);
+    }
+  </script>
+</body>
+
+</html>
